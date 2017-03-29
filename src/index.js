@@ -4,7 +4,8 @@ import scriptjs from 'scriptjs';
 
 class SelectPlaces extends Component {
   static propTypes = {
-    value: React.PropTypes.string
+    value: React.PropTypes.string,
+    apiKey: React.PropTypes.string.isRequired
   }
 
   constructor(props) {
@@ -32,8 +33,8 @@ class SelectPlaces extends Component {
     };
 
     if (input) {
-      if (!this.autocompleteService) {
-        scriptjs(`https://maps.googleapis.com/maps/api/js?libraries=places&language=${this.props.language}&no-cache=${Math.random()}`, () => {
+      if (!window.google || !window.google.maps) {
+        scriptjs(`https://maps.googleapis.com/maps/api/js?libraries=places&language=${this.props.language}&key=${this.props.apiKey}&no-cache=${Math.random()}`, () => {
           if (window.google) {
             this.autocompleteService = new window.google.maps.places.AutocompleteService();
             getPlacePredictions(input, callback);
@@ -44,6 +45,9 @@ class SelectPlaces extends Component {
         });
       }
       else {
+        if(!this.autocompleteService) {
+          this.autocompleteService = new window.google.maps.places.AutocompleteService();
+        }
         getPlacePredictions(input, callback);
       }
     } else {
@@ -52,22 +56,27 @@ class SelectPlaces extends Component {
   }
 
   onChange = value => {
-    const getDetails = (value) => {
-      this.placesService.getDetails({placeId: value.placeId}, (placeResult) => {
-        this.setState({
-          value
-        }, () => {
-          this.props.onChange && this.props.onChange({ ...value, ...placeResult});
+    if (value) {
+      const getDetails = (value) => {
+        this.placesService.getDetails({placeId: value.placeId}, (placeResult) => {
+          this.setState({
+            value
+          }, () => {
+            this.props.onChange && this.props.onChange({ ...value, ...placeResult});
+          });
         });
-      });
-    }
+      }
 
-    if(window.google && !this.placesService){
-      this.placesService = new google.maps.places.PlacesService(this.refs.selectPlaces);
+      if(!this.placesService){
+        this.placesService = new google.maps.places.PlacesService(this.refs.selectPlaces);
+      }
+
       getDetails(value);
     }
     else {
-      getDetails(value);
+      this.setState({
+        value
+      });
     }
   }
 
