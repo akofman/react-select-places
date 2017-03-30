@@ -1,0 +1,19 @@
+.short {
+  width: 300px;
+}
+
+.pink .Select-control{
+  background-color: #eb5d88;
+}
+
+.pink .Select-placeholder, .pink .Select-arrow{
+  color: white;
+}
+
+.pink .Select-arrow {
+  border-color: white transparent transparent;
+}
+
+.pink .Select-clear {
+  color: white;
+}

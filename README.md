@@ -4,7 +4,7 @@
 [![npm package][npm-badge]][npm]
 [![Coveralls][coveralls-badge]][coveralls]
 
-Describe react-select-places here.
+AutocompletionRequest: https://developers.google.com/maps/documentation/javascript/3.exp/reference?hl=fr#AutocompletionRequest
 
 [build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
 [build]: https://travis-ci.org/user/repo

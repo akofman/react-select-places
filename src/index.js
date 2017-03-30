@@ -5,7 +5,16 @@ import scriptjs from 'scriptjs';
 class SelectPlaces extends Component {
   static propTypes = {
     value: React.PropTypes.string,
-    apiKey: React.PropTypes.string.isRequired
+    apiKey: React.PropTypes.string,
+    onChange: React.PropTypes.func,
+    autocompletionRequest:  React.PropTypes.shape({
+      bounds: React.PropTypes.object,
+      componentRestrictions: React.PropTypes.object,
+      location: React.PropTypes.object,
+      offset: React.PropTypes.number,
+      radius: React.PropTypes.number,
+      types: React.PropTypes.array
+    })
   }
 
   constructor(props) {
