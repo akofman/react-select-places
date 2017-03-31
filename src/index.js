@@ -7,6 +7,8 @@ class SelectPlaces extends Component {
     value: React.PropTypes.string,
     apiKey: React.PropTypes.string,
     onChange: React.PropTypes.func,
+    simpleValue: React.PropTypes.bool,
+    language: React.PropTypes.string,
     autocompletionRequest:  React.PropTypes.shape({
       bounds: React.PropTypes.object,
       componentRestrictions: React.PropTypes.object,
@@ -25,13 +27,15 @@ class SelectPlaces extends Component {
   }
 
   loadOptions = (input, callback) => {
+    const {autocompletionRequest, language, apiKey} = this.props;
     const getPlacePredictions = (input, callback) => {
-      this.autocompleteService.getPlacePredictions({...this.props.autocompletionRequest, input}, (predictions) => {
+      this.autocompleteService.getPlacePredictions({...autocompletionRequest, input}, (predictions) => {
         let options = [];
         if(predictions) {
           options = predictions.map(prediction => ({
             label: prediction.description,
-            placeId: prediction.place_id
+            placeId: prediction.place_id,
+            ...prediction
           }));
         }
         callback(null, {
@@ -43,7 +47,7 @@ class SelectPlaces extends Component {
 
     if (input) {
       if (!window.google || !window.google.maps) {
-        scriptjs(`https://maps.googleapis.com/maps/api/js?libraries=places&language=${this.props.language}&key=${this.props.apiKey}&no-cache=${Math.random()}`, () => {
+        scriptjs(`https://maps.googleapis.com/maps/api/js?libraries=places&language=${language}&key=${apiKey}&no-cache=${Math.random()}`, () => {
           if (window.google) {
             this.autocompleteService = new window.google.maps.places.AutocompleteService();
             getPlacePredictions(input, callback);
@@ -65,26 +69,23 @@ class SelectPlaces extends Component {
   }
 
   onChange = value => {
-    if (value) {
-      const getDetails = (value) => {
-        this.placesService.getDetails({placeId: value.placeId}, (placeResult) => {
-          this.setState({
-            value
-          }, () => {
-            this.props.onChange && this.props.onChange({ ...value, ...placeResult});
-          });
+    const {onChange, multi, simpleValue} = this.props;
+    const place = multi?value[value.length -1]:value;
+    if (place && onChange && !simpleValue) {
+      this.placesService = this.placesService || new google.maps.places.PlacesService(this.refs.selectPlaces);
+      this.placesService.getDetails({placeId: place.placeId}, (placeInfo) => {
+        this.setState({
+          value
+        }, () => {
+          onChange(placeInfo);
         });
-      }
-
-      if(!this.placesService){
-        this.placesService = new google.maps.places.PlacesService(this.refs.selectPlaces);
-      }
-
-      getDetails(value);
+      });
     }
     else {
       this.setState({
-        value
+        value: value[0] && {label: value}
+      }, () => {
+        onChange(value);
       });
     }
   }
@@ -92,8 +93,8 @@ class SelectPlaces extends Component {
   render() {
     return (
       <div>
-        <Select.Async {...this.props} value={this.state.value} loadOptions={this.loadOptions} onChange={this.onChange} />
-        <div ref='selectPlaces'></div>
+        <Select.Async {...this.props} valueKey='label' value={this.state.value} loadOptions={this.loadOptions} onChange={this.onChange}  />
+          <div ref="selectPlaces"></div>
       </div>
     )
   }
