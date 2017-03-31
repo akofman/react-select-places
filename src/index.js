@@ -19,11 +19,29 @@ class SelectPlaces extends Component {
     })
   }
 
+  getDefaultValue = () => {
+    let value;
+    if(this.props.value) {
+      if(this.props.multi){
+        value = this.props.value.map((label) => ({
+          label
+        }));
+      } else {
+        value = {label: this.props.value};
+      }
+    }
+    return value;
+  }
+
   constructor(props) {
     super(props);
-    this.state = {
-      value: null
-    }
+    this.state = {value: this.getDefaultValue()}
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      value: this.getDefaultValue()
+    });
   }
 
   loadOptions = (input, callback) => {
@@ -38,6 +56,7 @@ class SelectPlaces extends Component {
             ...prediction
           }));
         }
+
         callback(null, {
           options,
           complete: false
@@ -70,9 +89,12 @@ class SelectPlaces extends Component {
 
   onChange = value => {
     const {onChange, multi, simpleValue} = this.props;
+    const removing = multi && this.state.value && this.state.value.length > value.length;
     const place = multi?value[value.length -1]:value;
-    if (place && onChange && !simpleValue) {
-      this.placesService = this.placesService || new google.maps.places.PlacesService(this.refs.selectPlaces);
+    if (place && onChange && !simpleValue && !removing) {
+      if(!this.placesService) {
+        this.placesService = new google.maps.places.PlacesService(this.refs.selectPlaces);
+      }
       this.placesService.getDetails({placeId: place.placeId}, (placeInfo) => {
         this.setState({
           value
@@ -83,9 +105,9 @@ class SelectPlaces extends Component {
     }
     else {
       this.setState({
-        value: value[0] && {label: value}
+        value: simpleValue?value && {label: value}:value
       }, () => {
-        onChange(value);
+        onChange && onChange(value);
       });
     }
   }
@@ -94,7 +116,7 @@ class SelectPlaces extends Component {
     return (
       <div>
         <Select.Async {...this.props} valueKey='label' value={this.state.value} loadOptions={this.loadOptions} onChange={this.onChange}  />
-          <div ref="selectPlaces"></div>
+        <div ref="selectPlaces"></div>
       </div>
     )
   }

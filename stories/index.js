@@ -11,9 +11,15 @@ storiesOf('SelectPlaces', module)
 .addWithInfo(
   'default',
   `
-  This is the basic usage without any props.
+  This is the basic usage without any props or with a default value.
   `,
-  () => (<SelectPlaces apiKey={apiKey} />),
+  () => (
+    <div>
+      <SelectPlaces apiKey={apiKey} language='en' />
+      <br/>
+      <SelectPlaces apiKey={apiKey} value={'France'} language='en' />
+    </div>
+  ),
   { inline }
 )
 .addWithInfo(
@@ -29,7 +35,7 @@ storiesOf('SelectPlaces', module)
   </a>.
 </p>
 </div>),
-() => (<SelectPlaces className={'short pink'} apiKey={apiKey} />),
+() => (<SelectPlaces className={'short pink'} apiKey={apiKey} language='en' />),
 { inline }
 )
 .addWithInfo(
@@ -41,7 +47,7 @@ storiesOf('SelectPlaces', module)
       </a>.
     </p>
   </div>),
-  () => (<SelectPlaces onChange={action('onChange')} apiKey={apiKey} />),
+  () => (<SelectPlaces onChange={action('onChange')} apiKey={apiKey} language='en' />),
   { inline }
 )
 .addWithInfo(
@@ -61,7 +67,7 @@ storiesOf('SelectPlaces', module)
         country: 'FR'
       }
     };
-    return <SelectPlaces autocompletionRequest={autocompletionRequest} apiKey={apiKey} />
+    return <SelectPlaces autocompletionRequest={autocompletionRequest} apiKey={apiKey} language='en' />
   },
   { inline }
 )
@@ -79,9 +85,9 @@ storiesOf('SelectPlaces', module)
   () => {
     return (
       <div>
-        <SelectPlaces multi onChange={action('onChange')} apiKey={apiKey} />
+        <SelectPlaces multi onChange={action('onChange')} apiKey={apiKey} value={['France', 'Australia']} language='en'/>
         <br/>
-        <SelectPlaces simpleValue delimiter='&' multi onChange={action('onChange')} apiKey={apiKey} />
+        <SelectPlaces simpleValue delimiter='&' multi onChange={action('onChange')} apiKey={apiKey} language='en' />
       </div>
     )
   },
