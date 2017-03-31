@@ -13,7 +13,6 @@
   "scripts": {
     "build": "nwb build-react-component",
     "clean": "nwb clean-module && npm clean-demo",
-    "start": "nwb serve-react-demo",
     "test": "nwb test-react",
     "test:coverage": "nwb test-react --coverage",
     "test:watch": "nwb test-react --server",
@@ -21,9 +20,9 @@
     "build-storybook": "build-storybook",
     "deploy-storybook": "storybook-to-ghpages"
   },
-  "dependencies": {},
   "peerDependencies": {
-    "react": "15.x"
+    "react": "15.x",
+    "react-select": "1.0.0-rc.3"
   },
   "devDependencies": {
     "@kadira/react-storybook-addon-info": "^3.4.0",
@@ -35,11 +34,17 @@
     "react-select": "^1.0.0-rc.3",
     "scriptjs": "^2.5.8"
   },
-  "author": "",
-  "homepage": "",
+  "author": "Alexis Kofman",
   "license": "MIT",
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akofman/react-select-places.git"
+  },
   "keywords": [
-    "react-component"
+    "places",
+    "react",
+    "react-component",
+    "select",
+    "ui"
   ]
 }

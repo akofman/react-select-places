@@ -5,7 +5,8 @@ module.exports = {
     umd: {
       global: 'SelectPlaces',
       externals: {
-        react: 'React'
+        react: 'React',
+        'react-select': 'umd react-select'
       }
     }
   }

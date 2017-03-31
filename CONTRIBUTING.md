@@ -6,9 +6,9 @@
 
 - Running `npm install` in the components's root directory will install everything you need for development.
 
-## Demo Development Server
+## Storybook
 
-- `npm start` will run a development server with the component's demo app at [http://localhost:3000](http://localhost:3000) with hot module reloading.
+- `npm run storybook` will run a [storybook](https://github.com/storybooks/react-storybook) at [http://localhost:6006](http://localhost:6006) with hot module reloading.
 
 ## Running Tests
 
