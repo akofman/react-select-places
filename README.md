@@ -7,6 +7,7 @@
 A Select control for places built from [React-Select](https://github.com/JedWatson/react-select) and [Google Places](https://developers.google.com/places/).
 
 ## Demo & Examples
+![demo](https://cloud.githubusercontent.com/assets/579922/24573198/8470ba08-1680-11e7-8726-e78ade5f0e05.gif)
 
 Live demo: [akofman.github.io/react-select-places](https://akofman.github.io/react-select-places)
 
