@@ -22,7 +22,10 @@ Then open [`localhost:6006`](http://localhost:6006) in a browser.
 
 ## Installation
 
+:warning:`react-select` is not bundled into this component. You must add it as a dependency of your project in order to use `react-select-places`.
+
 ```javascript
+npm install --save react-select
 npm install --save react-select-places
 ```
 
@@ -55,7 +58,7 @@ function logChange(val) {
 />
 ```
 
-Also this component uses the Google Maps Places API, you need to include the Google Maps Places API in the <head> of your HTML:
+It also uses the Google Maps Places API, so you need to include it in the `<head>` of your HTML:
 
 ```html
 <!DOCTYPE html>
@@ -69,14 +72,16 @@ Also this component uses the Google Maps Places API, you need to include the Goo
   </body>
 </html>
 ```
-or you can provide your api key as a props:
+or you can simply provide your api key as a props:
 
 ```javascript
 <SelectPlaces
   apiKey='YOUR_API_KEY'
 />
 ```
-Then you have the possibility to configure the [AutocompletionRequest](https://developers.google.com/maps/documentation/javascript/3.exp/reference?hl=fr#AutocompletionRequest) as it is specified in the Google Places API:
+Then you have the possibility to configure the [AutocompletionRequest](https://developers.google.com/maps/documentation/javascript/3.exp/reference?hl=fr#AutocompletionRequest) as it is specified in the Google Places API.
+
+Example:
 
 ```javascript
 const autocompletionRequest = {
@@ -89,9 +94,13 @@ const autocompletionRequest = {
 <SelectPlaces autocompletionRequest={autocompletionRequest} apiKey={apiKey} />
 ```
 
+The value retrieved from the parameter of the `onChange` callback is a [PlaceResult](https://developers.google.com/maps/documentation/javascript/3.exp/reference?hl=fr#PlaceResult).
+
+You can indicate an IETF language code from the `language` prop in order to choose the language of the predictions.
+
 # Contributing
 
-See our [CONTRIBUTING.md](https://github.com/akofman/react-select-places/blob/master/CONTRIBUTING.md) for information on how to contribute.
+See the [CONTRIBUTING.md](https://github.com/akofman/react-select-places/blob/master/CONTRIBUTING.md) for information on how to contribute.
 
 # License
 

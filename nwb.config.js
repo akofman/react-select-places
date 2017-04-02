@@ -1,13 +1,9 @@
 module.exports = {
   type: 'react-component',
-  npm: {
-    esModules: true,
-    umd: {
-      global: 'SelectPlaces',
-      externals: {
-        react: 'React',
-        'react-select': 'umd react-select'
-      }
-    }
+  umd: true,
+  global: 'ReactSelectPlaces',
+  externals: {
+    react: 'React',
+    'react-select': 'ReactSelect'
   }
 }
