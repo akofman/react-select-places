@@ -1,7 +1,7 @@
 {
   "name": "react-select-places",
   "version": "1.0.0",
-  "description": "react-select-places React component",
+  "description": "A Select control for places built from React-Select and Google Places.",
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [

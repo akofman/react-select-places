@@ -19,7 +19,7 @@ class SelectPlaces extends Component {
     })
   }
 
-  getDefaultValue = () => {
+  bindInitialValue = () => {
     let value;
     if(this.props.value) {
       if(this.props.multi){
@@ -30,18 +30,16 @@ class SelectPlaces extends Component {
         value = {label: this.props.value};
       }
     }
-    return value;
+    return {value};
   }
 
   constructor(props) {
     super(props);
-    this.state = {value: this.getDefaultValue()}
+    this.state = this.bindInitialValue()
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      value: this.getDefaultValue()
-    });
+    this.setState(this.bindInitialValue());
   }
 
   loadOptions = (input, callback) => {
