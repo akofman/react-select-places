@@ -19,15 +19,15 @@ class SelectPlaces extends Component {
     })
   }
 
-  bindInitialValue = () => {
+  bindInitialValue = (props) => {
     let value;
-    if(this.props.value) {
-      if(this.props.multi){
-        value = this.props.value.map((label) => ({
+    if(props.value) {
+      if(props.multi){
+        value = props.value.map((label) => ({
           label
         }));
       } else {
-        value = {label: this.props.value};
+        value = {label: props.value};
       }
     }
     return {value};
@@ -35,11 +35,11 @@ class SelectPlaces extends Component {
 
   constructor(props) {
     super(props);
-    this.state = this.bindInitialValue()
+    this.state = this.bindInitialValue(props)
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState(this.bindInitialValue());
+    this.setState(this.bindInitialValue(nextProps));
   }
 
   loadOptions = (input, callback) => {
