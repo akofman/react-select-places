@@ -42,7 +42,22 @@ Or you can use [styled-component](https://github.com/styled-components/styled-co
 
 ## Usage
 
-`React-Select-Places` wraps `React-Select` so that you can use all of its [options](https://github.com/JedWatson/react-select#usage).
+`React-Select-Places` uses the Google Maps Places API, so you need to include it in the `<head>` of your HTML:
+
+```html
+<!DOCTYPE html>
+  <html>
+  <head>
+    …
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+  </head>
+  <body>
+    …
+  </body>
+</html>
+```
+
+It wraps `React-Select` so that you can use all of its [options](https://github.com/JedWatson/react-select#usage).
 
 Example:
 
@@ -58,22 +73,9 @@ function logChange(val) {
 />
 ```
 
-It also uses the Google Maps Places API, so you need to include it in the `<head>` of your HTML:
+The value retrieved from the parameter of the `onChange` callback is a [PlaceResult](https://developers.google.com/maps/documentation/javascript/3.exp/reference?hl=fr#PlaceResult).
 
-```html
-<!DOCTYPE html>
-  <html>
-  <head>
-    …
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
-  </head>
-  <body>
-    …
-  </body>
-</html>
-```
-
-Then you have the possibility to configure the [AutocompletionRequest](https://developers.google.com/maps/documentation/javascript/3.exp/reference?hl=fr#AutocompletionRequest) as it is specified in the Google Places API.
+You also have the possibility to configure the [AutocompletionRequest](https://developers.google.com/maps/documentation/javascript/3.exp/reference?hl=fr#AutocompletionRequest) as it is specified in the Google Places API.
 
 Example:
 
@@ -88,9 +90,7 @@ const autocompletionRequest = {
 <SelectPlaces autocompletionRequest={autocompletionRequest} />
 ```
 
-The value retrieved from the parameter of the `onChange` callback is a [PlaceResult](https://developers.google.com/maps/documentation/javascript/3.exp/reference?hl=fr#PlaceResult).
-
-It is possible to init a default value using the `value` property:
+A default value can be provided from the `value` property:
 
 ```javascript
 <SelectPlaces value={{ label:'Paris' }} />

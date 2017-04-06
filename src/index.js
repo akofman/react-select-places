@@ -44,11 +44,9 @@ class SelectPlaces extends Component {
 
     if(props.multi) {
       let multiValue = [];
-      if(props.value) {
-        props.value.forEach(async (place) => {
-          multiValue.push(await retrieveValue({value: place}));
-        });
-      }
+      props.value.forEach(async (place) => {
+        multiValue.push(await retrieveValue({value: place}));
+      });
       this.setState({value: await multiValue});
     } else {
       this.setState({value: await retrieveValue(props)});
@@ -62,7 +60,7 @@ class SelectPlaces extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.value && this.props.value !== nextProps.value) {
+    if (nextProps.value && this.props.value !== nextProps.value) {
       this.mapValueToState(nextProps);
     }
   }
