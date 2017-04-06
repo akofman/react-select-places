@@ -72,13 +72,7 @@ It also uses the Google Maps Places API, so you need to include it in the `<head
   </body>
 </html>
 ```
-or you can simply provide your api key as a props:
 
-```javascript
-<SelectPlaces
-  apiKey='YOUR_API_KEY'
-/>
-```
 Then you have the possibility to configure the [AutocompletionRequest](https://developers.google.com/maps/documentation/javascript/3.exp/reference?hl=fr#AutocompletionRequest) as it is specified in the Google Places API.
 
 Example:
@@ -91,12 +85,29 @@ const autocompletionRequest = {
   }
 };
 
-<SelectPlaces autocompletionRequest={autocompletionRequest} apiKey={apiKey} />
+<SelectPlaces autocompletionRequest={autocompletionRequest} />
 ```
 
 The value retrieved from the parameter of the `onChange` callback is a [PlaceResult](https://developers.google.com/maps/documentation/javascript/3.exp/reference?hl=fr#PlaceResult).
 
-You can indicate an IETF language code from the `language` prop in order to choose the language of the predictions.
+It is possible to init a default value using the `value` property:
+
+```javascript
+<SelectPlaces value={{ label:'Paris' }} />
+```
+
+The `value` property can be an object with the `label` and `placeId` attributes.
+If `placeId` is provided, this component will use the Google Maps Places API in order to retrieve the label to display in the right language. If the place is not retrieved, the provided `label` will be used.
+
+```javascript
+<SelectPlaces value={{ label:'defaultLabel', placeId:'ChIJpTvG15DL1IkRd8S0KlBVNTI' }} />
+```
+
+It is also possible to provide only the label as a string:
+
+```javascript
+<SelectPlaces value='Paris' />
+```
 
 # Contributing
 

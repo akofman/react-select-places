@@ -1,23 +1,36 @@
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
+import scriptjs from 'scriptjs';
 import SelectPlaces from '../src';
 import 'react-select/dist/react-select.css';
 import './styles.css';
 
-const apiKey = 'AIzaSyBTu5Vh3iLX03PQWsK1IumqjsVDL2EnFx8';
 const inline = true;
 
 storiesOf('SelectPlaces', module)
 .addWithInfo(
   'default',
-  `
-  This is the basic usage without any props or with a default value.
-  `,
+  null,
   () => (
     <div>
-      <SelectPlaces apiKey={apiKey} language='en' />
+      <p>
+        This is the basic usage without any props or with a default value.
+      </p>
+      <SelectPlaces />
+      <p>
+        As a default value it is possible to provide a <b>label</b> and a <b>placeId</b>.
+        <br/>If the <b>placeId</b> property is provided, this component will use the <b>Google Maps Places API</b> in order to retrieve the label to display.
+        <br/>If the place is not retrieved, the <b>label</b> property will be used:
+      </p>
+      <SelectPlaces value={{placeId: 'ChIJpTvG15DL1IkRd8S0KlBVNTI'}} />
       <br/>
-      <SelectPlaces apiKey={apiKey} value={'France'} language='en' />
+      <SelectPlaces value={{label: 'MyCity'}} />
+      <br/>
+      <SelectPlaces value={{label:'MyCity', placeId: 'fakeId'}} />
+      <p>
+        It is also possible to provide only the label as a string:
+      </p>
+      <SelectPlaces value='MyCity' />
     </div>
   ),
   { inline }
@@ -27,16 +40,14 @@ storiesOf('SelectPlaces', module)
   (<div>
     <p>
       It is possible to override the default <a href='https://github.com/JedWatson/react-select' target='_blank'>
-      react-select
-    </a> styles
-    from the className props which is also convenient in order to
-    use libs like <a href='https://github.com/styled-components/styled-components' target='_blank'>
-    styled-component
-  </a>.
-</p>
-</div>),
-() => (<SelectPlaces className={'short pink'} apiKey={apiKey} language='en' />),
-{ inline }
+      react-select</a> styles
+      from the className props which is also convenient in order to
+      use libs like <a href='https://github.com/styled-components/styled-components' target='_blank'>
+      styled-component</a>.
+    </p>
+  </div>),
+  () => (<SelectPlaces className={'short pink'} />),
+  { inline }
 )
 .addWithInfo(
   'retrieve places info on change',
@@ -47,7 +58,7 @@ storiesOf('SelectPlaces', module)
       </a>.
     </p>
   </div>),
-  () => (<SelectPlaces onChange={action('onChange')} apiKey={apiKey} language='en' />),
+  () => (<SelectPlaces onChange={action('onChange')} />),
   { inline }
 )
 .addWithInfo(
@@ -67,7 +78,7 @@ storiesOf('SelectPlaces', module)
         country: 'FR'
       }
     };
-    return <SelectPlaces autocompletionRequest={autocompletionRequest} apiKey={apiKey} language='en' />
+    return <SelectPlaces autocompletionRequest={autocompletionRequest} />
   },
   { inline }
 )
@@ -85,9 +96,9 @@ storiesOf('SelectPlaces', module)
   () => {
     return (
       <div>
-        <SelectPlaces multi onChange={action('onChange')} apiKey={apiKey} value={['France', 'Australia']} language='en'/>
+        <SelectPlaces multi onChange={action('onChange')} value={['France', 'Australia']} />
         <br/>
-        <SelectPlaces simpleValue delimiter='&' multi onChange={action('onChange')} apiKey={apiKey} language='en' />
+        <SelectPlaces simpleValue delimiter='&' multi onChange={action('onChange')} />
       </div>
     )
   },
