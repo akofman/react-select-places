@@ -1,6 +1,5 @@
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
-import scriptjs from 'scriptjs';
 import SelectPlaces from '../src';
 import 'react-select/dist/react-select.css';
 import './styles.css';
