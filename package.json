@@ -19,7 +19,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "deploy-storybook": "storybook-to-ghpages",
-    "prepublish": "yarn run clean && yarn test && yarn run build"
+    "prepublishOnly": "yarn run clean && yarn test && yarn run build"
   },
   "peerDependencies": {
     "react": "15.x",
