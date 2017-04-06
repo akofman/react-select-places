@@ -1,6 +1,6 @@
 {
   "name": "react-select-places",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "A Select control for places built from React-Select and Google Places.",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -12,13 +12,14 @@
   ],
   "scripts": {
     "build": "nwb build-react-component",
-    "clean": "nwb clean-module && npm clean-demo",
+    "clean": "nwb clean-module",
     "test": "jest --silent=true --colors",
     "test:coverage": "nwb test-react --coverage",
     "test:watch": "nwb test-react --server",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "deploy-storybook": "storybook-to-ghpages"
+    "deploy-storybook": "storybook-to-ghpages",
+    "prepublish": "yarn run clean && yarn test && yarn run build"
   },
   "peerDependencies": {
     "react": "15.x",
@@ -40,6 +41,17 @@
     "react-test-renderer": "15.4.2",
     "regenerator-runtime": "0.10.3",
     "storyshots": "3.2.2"
+  },
+  "babel": {
+    "presets": ["react", "es2015", "stage-0"],
+    "plugins": [
+      [
+        "transform-runtime", {
+          "polyfill": false,
+          "regenerator": true
+        }
+      ]
+    ]
   },
   "jest": {
     "verbose": true,
