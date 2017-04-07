@@ -6,7 +6,7 @@ class SelectPlaces extends Component {
     const retrieveValue = async (props) => {
       let value;
 
-      if(props.value.placeId) {
+      if(props.value && props.value.placeId) {
         try{
           value = await new Promise((resolve, reject) => {
             if(!this.placesService && window.google && window.google.maps) {
@@ -36,7 +36,7 @@ class SelectPlaces extends Component {
           value = { label: props.value };
         }
         else {
-          value = props.value.label && { label: props.value.label };
+          value = props.value && props.value.label && { label: props.value.label };
         }
       }
       return value;
@@ -60,7 +60,7 @@ class SelectPlaces extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.value && this.props.value !== nextProps.value) {
+    if (this.props.value !== nextProps.value) {
       this.mapValueToState(nextProps);
     }
   }
