@@ -10,7 +10,7 @@ class SelectPlaces extends Component {
         try{
           value = await new Promise((resolve, reject) => {
             if(!this.placesService && window.google && window.google.maps) {
-              this.placesService = new window.google.maps.places.PlacesService(this.refs.selectPlaces);
+              this.placesService = new window.google.maps.places.PlacesService(this.selectPlacesNode);
             }
 
             this.placesService.getDetails({placeId: props.value.placeId}, (placeInfo, requestStatus) => {
@@ -103,7 +103,7 @@ class SelectPlaces extends Component {
 
     if (place && place.place_id && onChange && !simpleValue && !removing) {
       if(!this.placesService) {
-        this.placesService = new window.google.maps.places.PlacesService(this.refs.selectPlaces);
+        this.placesService = new window.google.maps.places.PlacesService(this.selectPlacesNode);
       }
       this.placesService.getDetails({placeId: place.place_id}, (placeInfo) => {
         this.setState({
@@ -126,7 +126,7 @@ class SelectPlaces extends Component {
     return (
       <div>
         <Select.Async {...this.props} valueKey='label' value={this.state && this.state.value} loadOptions={this.loadOptions} onChange={this.onChange} onOpen={this.onOpen}/>
-        <div ref='selectPlaces'></div>
+        <div ref={ (node) =>  (this.selectPlacesNode = node) }></div>
       </div>
     )
   }
