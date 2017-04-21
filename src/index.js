@@ -1,57 +1,64 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
 
 class SelectPlaces extends Component {
-  mapValueToState = async (props) => {
-    const retrieveValue = async (props) => {
+  mapValueToState = async props => {
+    const retrieveValue = async props => {
       let value;
 
-      if(props.value && props.value.placeId) {
-        try{
+      if (props.value && props.value.placeId) {
+        try {
           value = await new Promise((resolve, reject) => {
-            if(!this.placesService && window.google && window.google.maps) {
-              this.placesService = new window.google.maps.places.PlacesService(this.selectPlacesNode);
+            if (!this.placesService && window.google && window.google.maps) {
+              this.placesService = new window.google.maps.places.PlacesService(
+                this.selectPlacesNode
+              );
             }
 
-            this.placesService.getDetails({placeId: props.value.placeId}, (placeInfo, requestStatus) => {
-              if(requestStatus === 'OK') {
-                resolve({label: placeInfo.formatted_address});
+            this.placesService.getDetails(
+              { placeId: props.value.placeId },
+              (placeInfo, requestStatus) => {
+                if (requestStatus === 'OK') {
+                  resolve({ label: placeInfo.formatted_address });
+                } else if (props.value.label) {
+                  console.warn(
+                    `Google Maps Places API RequestStatus is: ${requestStatus}, label property is used`
+                  );
+                  resolve({ label: props.value.label });
+                } else {
+                  reject();
+                  console.warn(
+                    `Google Maps Places API RequestStatus is: ${requestStatus} and label property is missing`
+                  );
+                }
               }
-              else if (props.value.label) {
-                console.warn(`Google Maps Places API RequestStatus is: ${requestStatus}, label property is used`);
-                resolve({label: props.value.label});
-              }
-              else {
-                reject();
-                console.warn(`Google Maps Places API RequestStatus is: ${requestStatus} and label property is missing`);
-              }
-            });
+            );
           });
-        } catch(e) {
+        } catch (e) {
           console.warn('Google Maps Places is not loaded', e);
           value = props.value.label && { label: props.value.label };
         }
       } else {
-        if(typeof props.value === 'string') {
+        if (typeof props.value === 'string') {
           value = { label: props.value };
-        }
-        else {
-          value = props.value && props.value.label && { label: props.value.label };
+        } else {
+          value = props.value &&
+          props.value.label && { label: props.value.label };
         }
       }
       return value;
-    }
+    };
 
-    if(props.multi) {
+    if (props.multi) {
       let multiValue = [];
-      props.value.forEach(async (place) => {
-        multiValue.push(await retrieveValue({value: place}));
+      props.value.forEach(async place => {
+        multiValue.push(await retrieveValue({ value: place }));
       });
-      this.setState({value: await multiValue});
+      this.setState({ value: await multiValue });
     } else {
-      this.setState({value: await retrieveValue(props)});
+      this.setState({ value: await retrieveValue(props) });
     }
-  }
+  };
 
   componentDidMount() {
     if (this.props.value) {
@@ -67,68 +74,88 @@ class SelectPlaces extends Component {
 
   loadOptions = (input, callback) => {
     if (input) {
-      if(!this.autocompleteService && window.google && window.google.maps) {
-        this.autocompleteService = new window.google.maps.places.AutocompleteService();
+      if (!this.autocompleteService && window.google && window.google.maps) {
+        this.autocompleteService = new window.google.maps.places
+          .AutocompleteService();
       }
 
-      if(this.autocompleteService) {
-        this.autocompleteService.getPlacePredictions({...this.props.autocompletionRequest, input}, (predictions) => {
-          let options = [];
-          if(predictions) {
-            options = predictions.map(prediction => ({
-              label: prediction.description,
-              ...prediction
-            }));
+      if (this.autocompleteService) {
+        this.autocompleteService.getPlacePredictions(
+          { ...this.props.autocompletionRequest, input },
+          predictions => {
+            let options = [];
+            if (predictions) {
+              options = predictions.map(prediction => ({
+                label: prediction.description,
+                ...prediction
+              }));
+            }
+
+            callback(null, {
+              options,
+              complete: false
+            });
           }
-
-          callback(null, {
-            options,
-            complete: false
-          });
-        });
+        );
+      } else {
+        callback(null, { options: [], complete: false });
       }
-      else {
-        callback(null, {options: [], complete: false});
-      }
+    } else {
+      callback(null, { options: [], complete: false });
     }
-    else {
-      callback(null, {options: [], complete: false});
-    }
-  }
+  };
 
-  onChange = (value) => {
-    const {onChange, multi, simpleValue} = this.props;
-    const removing = this.multi && this.state && this.state.value && this.state.value.length > value.length;
-    const place = multi?value[value.length -1]:value;
+  onChange = value => {
+    const { onChange, multi, simpleValue } = this.props;
+    const removing =
+      this.multi &&
+      this.state &&
+      this.state.value &&
+      this.state.value.length > value.length;
+    const place = multi ? value[value.length - 1] : value;
 
     if (place && place.place_id && onChange && !simpleValue && !removing) {
-      if(!this.placesService) {
-        this.placesService = new window.google.maps.places.PlacesService(this.selectPlacesNode);
+      if (!this.placesService) {
+        this.placesService = new window.google.maps.places.PlacesService(
+          this.selectPlacesNode
+        );
       }
-      this.placesService.getDetails({placeId: place.place_id}, (placeInfo) => {
-        this.setState({
-          value
-        }, () => {
-          onChange(placeInfo);
-        });
+      this.placesService.getDetails({ placeId: place.place_id }, placeInfo => {
+        this.setState(
+          {
+            value
+          },
+          () => {
+            onChange(placeInfo);
+          }
+        );
       });
+    } else {
+      this.setState(
+        {
+          value: simpleValue ? value && { label: value } : value
+        },
+        () => {
+          onChange && onChange(value);
+        }
+      );
     }
-    else {
-      this.setState({
-        value: simpleValue?value && {label: value}:value
-      }, () => {
-        onChange && onChange(value);
-      });
-    }
-  }
+  };
 
   render() {
     return (
       <div>
-        <Select.Async {...this.props} valueKey='label' value={this.state && this.state.value} loadOptions={this.loadOptions} onChange={this.onChange} onOpen={this.onOpen}/>
-        <div ref={ (node) =>  (this.selectPlacesNode = node) }></div>
+        <Select.Async
+          {...this.props}
+          valueKey="label"
+          value={this.state && this.state.value}
+          loadOptions={this.loadOptions}
+          onChange={this.onChange}
+          onOpen={this.onOpen}
+        />
+        <div ref={node => (this.selectPlacesNode = node)} />
       </div>
-    )
+    );
   }
 }
 
@@ -140,7 +167,7 @@ SelectPlaces.propTypes = {
   ]),
   onChange: PropTypes.func,
   simpleValue: PropTypes.bool,
-  autocompletionRequest:  PropTypes.shape({
+  autocompletionRequest: PropTypes.shape({
     bounds: PropTypes.object,
     componentRestrictions: PropTypes.object,
     location: PropTypes.object,

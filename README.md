@@ -3,6 +3,7 @@
 [![Travis][build-badge]][build]
 [![npm package][npm-badge]][npm]
 [![Coveralls][coveralls-badge]][coveralls]
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 A Select control for places built from [React-Select](https://github.com/JedWatson/react-select) and [Google Places](https://developers.google.com/places/).
 
